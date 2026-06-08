@@ -15,4 +15,6 @@ public class User : BaseEntity
     public bool IsActive { get; set; } = true;
 
     public DateTime? LastLoginAt { get; set; }
+
+    public ICollection<Vote> Votes { get; set; } = new List<Vote>();
 }

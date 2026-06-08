@@ -13,4 +13,8 @@ public class VotingSession : BaseEntity
     public bool ResultsPublished { get; set; }
 
     public DateTime? ResultsPublishedAt { get; set; }
+
+    public string? PublishedBy { get; set; }
+
+    public string? Notes { get; set; }
 }

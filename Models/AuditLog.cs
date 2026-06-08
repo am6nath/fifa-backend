@@ -9,4 +9,6 @@ public class AuditLog : BaseEntity
     public string EntityName { get; set; } = string.Empty;
 
     public string Description { get; set; } = string.Empty;
+
+    public string? IpAddress { get; set; }
 }

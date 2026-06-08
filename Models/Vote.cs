@@ -12,5 +12,7 @@ public class Vote : BaseEntity
 
     public DateTime VotedAt { get; set; } = DateTime.UtcNow;
 
-    public string VotedByIp { get; set; } = string.Empty;
+    public string? VotedByIp { get; set; }
+
+    public string? UserAgent { get; set; }
 }
