@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\fifa-backend.props" />
-</Project>
