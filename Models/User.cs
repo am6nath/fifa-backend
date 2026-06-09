@@ -8,7 +8,8 @@ public class User : BaseEntity
 
     public string Email { get; set; } = string.Empty;
 
-    public string PasswordHash { get; set; } = string.Empty;
+    public string? PasswordHash { get; set; }
+    public bool EmailVerified { get; set; }
 
     public UserRole Role { get; set; } = UserRole.User;
 

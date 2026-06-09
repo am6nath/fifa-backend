@@ -22,6 +22,21 @@ namespace fifa_backend.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("TeamVotingSession", b =>
+                {
+                    b.Property<int>("TeamsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VotingSessionsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TeamsId", "VotingSessionsId");
+
+                    b.HasIndex("VotingSessionsId");
+
+                    b.ToTable("VotingSessionTeams", (string)null);
+                });
+
             modelBuilder.Entity("fifa_backend.Models.AuditLog", b =>
                 {
                     b.Property<int>("Id")
@@ -59,7 +74,51 @@ namespace fifa_backend.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("AuditLogs");
+                });
+
+            modelBuilder.Entity("fifa_backend.Models.OtpVerification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AttemptCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("OtpCode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("VerifiedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OtpVerifications");
                 });
 
             modelBuilder.Entity("fifa_backend.Models.Team", b =>
@@ -103,6 +162,10 @@ namespace fifa_backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Region")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -126,6 +189,9 @@ namespace fifa_backend.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
+                    b.Property<bool>("EmailVerified")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -136,7 +202,6 @@ namespace fifa_backend.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("Role")
@@ -192,11 +257,16 @@ namespace fifa_backend.Migrations
                     b.Property<string>("VotedByIp")
                         .HasColumnType("longtext");
 
+                    b.Property<int>("VotingSessionId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TeamId");
 
-                    b.HasIndex("UserId")
+                    b.HasIndex("VotingSessionId");
+
+                    b.HasIndex("UserId", "VotingSessionId")
                         .IsUnique();
 
                     b.ToTable("Votes");
@@ -225,6 +295,9 @@ namespace fifa_backend.Migrations
                     b.Property<string>("PublishedBy")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("RegionFilter")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("ResultsPublished")
                         .HasColumnType("tinyint(1)");
 
@@ -244,9 +317,37 @@ namespace fifa_backend.Migrations
                     b.Property<DateTime>("VotingStartAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("WinnersCount")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("VotingSessions");
+                });
+
+            modelBuilder.Entity("TeamVotingSession", b =>
+                {
+                    b.HasOne("fifa_backend.Models.Team", null)
+                        .WithMany()
+                        .HasForeignKey("TeamsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fifa_backend.Models.VotingSession", null)
+                        .WithMany()
+                        .HasForeignKey("VotingSessionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("fifa_backend.Models.AuditLog", b =>
+                {
+                    b.HasOne("fifa_backend.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("fifa_backend.Models.Vote", b =>
@@ -263,9 +364,17 @@ namespace fifa_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("fifa_backend.Models.VotingSession", "VotingSession")
+                        .WithMany("Votes")
+                        .HasForeignKey("VotingSessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Team");
 
                     b.Navigation("User");
+
+                    b.Navigation("VotingSession");
                 });
 
             modelBuilder.Entity("fifa_backend.Models.Team", b =>
@@ -274,6 +383,11 @@ namespace fifa_backend.Migrations
                 });
 
             modelBuilder.Entity("fifa_backend.Models.User", b =>
+                {
+                    b.Navigation("Votes");
+                });
+
+            modelBuilder.Entity("fifa_backend.Models.VotingSession", b =>
                 {
                     b.Navigation("Votes");
                 });

@@ -16,5 +16,9 @@ public class Team : BaseEntity
 
     public bool IsActive { get; set; } = true;
 
+    public string Region { get; set; } = string.Empty;
+
     public ICollection<Vote> Votes { get; set; } = new List<Vote>();
+
+    public ICollection<VotingSession> VotingSessions { get; set; } = new List<VotingSession>();
 }

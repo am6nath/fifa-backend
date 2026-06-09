@@ -10,6 +10,10 @@ public class Vote : BaseEntity
 
     public Team Team { get; set; } = null!;
 
+    public int VotingSessionId { get; set; }
+
+    public VotingSession VotingSession { get; set; } = null!;
+
     public DateTime VotedAt { get; set; } = DateTime.UtcNow;
 
     public string? VotedByIp { get; set; }
