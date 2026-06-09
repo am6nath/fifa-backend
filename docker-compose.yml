@@ -28,6 +28,8 @@ services:
     depends_on:
       fifa-mysql:
         condition: service_healthy
+    volumes:
+      - C:\ProgramData\fifa-secrets\appsettings.Production.json:/app/appsettings.Production.json
     environment:
       - ConnectionStrings__DefaultConnection=server=fifa-mysql;port=3306;database=fifa_vote_db;user=root;password=fifa_mysql
       - ASPNETCORE_ENVIRONMENT=Production
