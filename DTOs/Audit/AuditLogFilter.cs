@@ -7,6 +7,7 @@ public class AuditLogFilter
     public string? Action { get; set; }
     public string? EntityName { get; set; }
     public int? UserId { get; set; }
+    public string? Username { get; set; }
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
 

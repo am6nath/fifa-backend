@@ -51,6 +51,11 @@ public class AuditLogService : IAuditLogService
             query = query.Where(x => x.UserId == filter.UserId.Value);
         }
 
+        if (!string.IsNullOrEmpty(filter.Username))
+        {
+            query = query.Where(x => x.User != null && x.User.UserName.Contains(filter.Username));
+        }
+
         if (filter.StartDate.HasValue)
         {
             query = query.Where(x => x.CreatedAt >= filter.StartDate.Value);
