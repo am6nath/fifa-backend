@@ -57,8 +57,15 @@ pipeline {
 
         stage('Docker Package') {
             steps {
+                echo 'Pulling base images...'
+                retry(2) {
+                    bat 'docker pull mcr.microsoft.com/dotnet/sdk:8.0 || exit /b 0'
+                    bat 'docker pull mcr.microsoft.com/dotnet/aspnet:8.0 || exit /b 0'
+                }
                 echo 'Building backend Docker image...'
-                bat 'docker build -t fifa-backend:latest .'
+                retry(3) {
+                    bat 'docker build -t fifa-backend:latest .'
+                }
             }
         }
     }
