@@ -71,8 +71,16 @@ pipeline {
     }
 
     post {
-        always {
-            echo 'Cleaning up docker containers...'
+        success {
+            echo 'Deploying the updated 3-container stack...'
+            bat 'docker compose up -d'
+        }
+        failure {
+            echo 'Build failed, cleaning up test containers...'
+            bat 'docker compose down || exit /b 0'
+        }
+        aborted {
+            echo 'Build aborted, cleaning up test containers...'
             bat 'docker compose down || exit /b 0'
         }
     }
