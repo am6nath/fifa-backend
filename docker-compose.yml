@@ -1,5 +1,5 @@
 services:
-  mysql:
+  fifa-mysql:
     image: mysql:8.0
     container_name: vote-mysql
     restart: always
@@ -25,10 +25,10 @@ services:
     ports:
       - "5139:8080"
     depends_on:
-      mysql:
+      fifa-mysql:
         condition: service_healthy
     environment:
-      - ConnectionStrings__DefaultConnection=server=mysql;port=3306;database=fifa_vote_db;user=root;password=fifa_mysql
+      - ConnectionStrings__DefaultConnection=server=fifa-mysql;port=3306;database=fifa_vote_db;user=root;password=fifa_mysql
       - ASPNETCORE_ENVIRONMENT=Production
 
   frontend:

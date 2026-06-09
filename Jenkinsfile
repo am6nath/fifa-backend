@@ -47,7 +47,7 @@ pipeline {
                 echo 'Spinning up MySQL DB test instance...'
                 // Start only the database service to run migrations checks
                 bat 'docker compose down --remove-orphans || exit /b 0'
-                bat 'docker compose up -d db'
+                bat 'docker compose up -d fifa-mysql'
                 
                 echo 'Waiting for MySQL database to initialize...'
                 // Wait for MySQL to start up and listen using Windows ping delay (approx 15 seconds)
