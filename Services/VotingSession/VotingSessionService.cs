@@ -53,14 +53,27 @@ public class VotingSessionService : IVotingSessionService
         if (request.TeamIds != null && request.TeamIds.Any())
         {
             var teams = await _unitOfWork.Teams.Query()
-                .Where(t => request.TeamIds.Contains(t.Id))
+                .Where(t => request.TeamIds.Contains(t.Id) && t.IsActive)
                 .ToListAsync();
 
             if (teams.Count != request.TeamIds.Count)
             {
-                throw new BadRequestException("One or more specified Team IDs do not exist.");
+                throw new BadRequestException("One or more specified Team IDs do not exist or are inactive.");
             }
 
+            foreach (var team in teams)
+            {
+                session.Teams.Add(team);
+            }
+        }
+        else
+        {
+            var query = _unitOfWork.Teams.Query().Where(t => t.IsActive);
+            if (!string.IsNullOrEmpty(request.RegionFilter))
+            {
+                query = query.Where(t => t.Region == request.RegionFilter);
+            }
+            var teams = await query.ToListAsync();
             foreach (var team in teams)
             {
                 session.Teams.Add(team);
@@ -110,14 +123,27 @@ public class VotingSessionService : IVotingSessionService
         if (request.TeamIds != null && request.TeamIds.Any())
         {
             var teams = await _unitOfWork.Teams.Query()
-                .Where(t => request.TeamIds.Contains(t.Id))
+                .Where(t => request.TeamIds.Contains(t.Id) && t.IsActive)
                 .ToListAsync();
 
             if (teams.Count != request.TeamIds.Count)
             {
-                throw new BadRequestException("One or more specified Team IDs do not exist.");
+                throw new BadRequestException("One or more specified Team IDs do not exist or are inactive.");
             }
 
+            foreach (var team in teams)
+            {
+                session.Teams.Add(team);
+            }
+        }
+        else
+        {
+            var query = _unitOfWork.Teams.Query().Where(t => t.IsActive);
+            if (!string.IsNullOrEmpty(request.RegionFilter))
+            {
+                query = query.Where(t => t.Region == request.RegionFilter);
+            }
+            var teams = await query.ToListAsync();
             foreach (var team in teams)
             {
                 session.Teams.Add(team);
